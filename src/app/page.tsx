@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Loader from "./components/Loader";
 
 
 export default function Home() {
@@ -21,7 +22,7 @@ export default function Home() {
           <span className="text-6xl">🔑</span>
           Auth
         </h1>
-        <Button className="bg-white px-5 py-8 rounded text-xl hover:bg-white/80" onClick={handleClick}>{isLoading ? 'Loading...' : 'Signin'}</Button>
+        <Button className="bg-white px-5 py-8 rounded text-xl hover:bg-white/80" onClick={handleClick}>{isLoading ? <Loader /> : 'Signin'}</Button>
       </div>
     </div>
   );
