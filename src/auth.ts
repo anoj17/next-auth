@@ -24,7 +24,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           email: { label: "email", type: "email" },
           password: { label: "Password", type: "password" },
         },
-        authorize: async (credentials) => {
+        authorize: async (credentials: any) => {
           const user = await db.user.findUnique({
             where: {
               email: credentials.email,
