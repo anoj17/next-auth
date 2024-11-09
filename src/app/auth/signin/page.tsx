@@ -13,6 +13,10 @@ import { Card } from '@/components/ui/card';
 import Header from '@/app/components/Header';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useFormStatus } from 'react-dom';
+import { loginUser } from '../../../../actions/register-action';
+import { useRouter } from 'next/navigation';
+import Loader from '@/app/components/Loader';
 
 const page = () => {
   const form = useForm<z.infer<typeof userLoginSchema>>({
@@ -23,8 +27,20 @@ const page = () => {
     },
   });
 
-  const handleSubmit = (data: z.infer<typeof userLoginSchema>) => {
-    console.log("helloooooooooo",data)
+  const { pending } = useFormStatus()
+  const router = useRouter()
+
+  const handleSubmit = async (data: z.infer<typeof userLoginSchema>) => {
+    // console.log(data)
+    try {
+      const response = await loginUser(data)
+      console.log(response)
+      if (response.success) {
+        router.push('/home')
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -43,11 +59,11 @@ const page = () => {
                       className="w-full rounded border-2 border-gray-300 p-2 text-black focus:border-blue-500 focus:ring-blue-500"
                     />
                   </FormControl>
-                  <FormMessage className='text-red-800'/>
+                  <FormMessage className='text-red-800' />
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name='password'
               render={({ field }) => (
@@ -58,11 +74,11 @@ const page = () => {
                       className="w-full rounded border-2 border-gray-300 p-2 text-black focus:border-blue-500 focus:ring-blue-500"
                     />
                   </FormControl>
-                  <FormMessage className='text-red-800'/>
+                  <FormMessage className='text-red-800' />
                 </FormItem>
               )}
             />
-            <Button type='submit' className='w-full mt-5 bg-black rounded text-white text-md hover:bg-black/80 px-5 py-3'>Sign in</Button>
+            <Button disabled={pending} type='submit' className={`${pending ? 'bg-gray-600' : 'bg-black'} w-full mt-5 rounded text-white text-md hover:bg-black/80 px-5 py-3`}>{pending ? <Loader /> : 'Sign in'}</Button>
           </form>
         </Form>
         <Social />

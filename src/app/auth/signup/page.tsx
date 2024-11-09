@@ -16,9 +16,12 @@ import Link from 'next/link';
 import { registerAction } from '../../../../actions/register-action';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { useFormStatus } from 'react-dom';
+import Loader from '@/app/components/Loader';
 
 const page = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const { pending } = useFormStatus()
 
   const router = useRouter()
 
@@ -93,11 +96,11 @@ const page = () => {
                 </FormItem>
               )}
             />
-            <Button type='submit' className='w-full mt-5 bg-black rounded text-white text-md hover:bg-black/90 px-5 py-3'>{isLoading ? 'Loading...' : 'Sign up'}</Button>
+             <Button disabled={pending} type='submit' className={`${pending ? 'bg-gray-600': 'bg-black'} w-full mt-5 rounded text-white text-md hover:bg-black/80 px-5 py-3`}>{isLoading ? 'loading...' : 'Sign up'}</Button>
           </form>
         </Form>
         <Social />
-        <h1 className='pt-4 w-full text-center'>Already have an account?<Link href={'/auth/signin'} className='text-blue-700 font-semibold'>signin</Link></h1>
+        <h1 className='pt-4 w-full text-center'>Already have an account?<Link href={'/auth/signin'} className='text-blue-700 font-semibold'>{pending ? <Loader /> : 'Sign in'}</Link></h1>
       </Card>
     </div>
   )
